@@ -1,0 +1,14 @@
+# Description: Pyspark Development Env Conda YAML File.
+# Run: conda env create --file pyspark.yml
+name: pyspark-dev
+channels:
+  - defaults
+dependencies:
+  - python=3.8.5
+  - pip
+  - git
+  - pip:
+    - pyspark==3.3.2
+    - pyspark[sql]
+    - pyspark[pandas_on_spark]
+    - pyspark[connect]
