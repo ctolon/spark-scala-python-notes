@@ -2,7 +2,7 @@
 # pyspark
 from pyspark.sql import DataFrame
 from typing import Optional, Tuple, List, Any
-from utils import Singleton
+from kaggle.spaceship_titanic.src.utils import Singleton
 
 class ExploratoryDataAnalysis(metaclass=Singleton):
     
@@ -268,3 +268,63 @@ class ExploratoryDataAnalysis(metaclass=Singleton):
     @property
     def test_toPandasDF(self):
         return self.test_df.select("*").toPandas()
+    
+# EDA
+import pandas as pd
+
+for column_name in train_num_columns:
+    g = sns.FacetGrid(train_arrow, col='Transported')
+    g.map(plt.hist, column_name, bins=40)
+    plt.show()
+    
+for i in cat_cols:
+    print(i)
+    sns.barplot(x=train_arrow[i].value_counts().index, y=train_arrow[i].value_counts()).set_title(i)
+    plt.show()
+    
+for i in cat_cols:
+    if i != "Transported":
+        sns.barplot(train_arrow, x=i, y='Transported').set_title(i)
+        plt.show()
+        
+for i in num_cols:
+    sns.histplot(train_arrow[i], kde=True, bins=25).set_title(i)
+    plt.show()
+    
+sns.heatmap(train_arrow.corr(), cmap='winter', annot=True, linecolor='black')
+
+"""
+print("EDA REPORT....")
+eda.print_train_raw_columns()
+eda.print_test_raw_columns()
+eda.print_pair_schemas()
+eda.print_pair_counts()
+eda.print_train_head()
+eda.print_test_head()
+eda.print_train_stats()
+eda.print_test_stats()
+"""
+
+"""
+# Get and Print Null Values
+train_null_counts = eda.get_train_null_values
+eda.print_train_null_values()
+
+test_null_counts = eda.get_test_null_values
+eda.print_test_null_values()
+
+# Print By Type
+eda.print_columns_by_type()
+
+
+# Get and Print Unique Values
+train_unique_counts = eda.get_train_distinct_count
+train_unique_counts.show()
+
+test_unique_counts = eda.get_test_distinct_count
+test_unique_counts.show()
+"""
+
+# Instance of EDA and Cache CSV Files
+eda = ExploratoryDataAnalysis(train_df=trainDF, test_df=testDF, strict=True)
+eda.setCache()
